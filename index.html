@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary Meta Tags -->
+  <title>PDF Imposition Tool - Free N-Up Layout Creator | Print Multiple Pages Per Sheet</title>
+  <meta name="title" content="PDF Imposition Tool - Free N-Up Layout Creator | Print Multiple Pages Per Sheet">
+  <meta name="description" content="Free browser-based PDF imposition tool for creating N-up layouts. Arrange multiple pages on a single sheet with customizable grids, gutters, and margins. Maintains vector quality. Perfect for booklets, business cards, and efficient printing.">
+  <meta name="keywords" content="PDF imposition, N-up printing, PDF layout tool, print multiple pages per sheet, PDF grid layout, booklet maker, PDF arranger, page imposition, PDF tile, sheet layout, printing optimization, paper saver, vector PDF, browser PDF tool, online PDF imposition, free imposition software">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://donytri86.github.io/pdf-imposition/">
+  <meta property="og:title" content="PDF Imposition Tool - Free N-Up Layout Creator">
+  <meta property="og:description" content="Free browser-based PDF imposition tool for creating N-up layouts. Arrange multiple pages on a single sheet with vector quality. Perfect for booklets, business cards, and efficient printing.">
+  <meta property="og:image" content="https://donytri86.github.io/pdf-imposition/preview.png">
+  <meta property="og:site_name" content="PDF Imposition Tool">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://donytri86.github.io/pdf-imposition/">
+  <meta name="twitter:title" content="PDF Imposition Tool - Free N-Up Layout Creator">
+  <meta name="twitter:description" content="Free browser-based PDF imposition tool for creating N-up layouts. Arrange multiple pages on a single sheet with vector quality.">
+  <meta name="twitter:image" content="https://donytri86.github.io/pdf-imposition/preview.png">
+
+  <!-- Additional Meta Tags -->
+  <meta name="theme-color" content="#2563eb">
+  <link rel="canonical" href="https://donytri86.github.io/pdf-imposition/">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    .number-input {
+      -moz-appearance: textfield;
+    }
+    .number-input::-webkit-outer-spin-button,
+    .number-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100">
+  <div class="min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+          <h1 class="text-3xl font-bold flex items-center gap-3">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+            </svg>
+            PDF Imposition Tool
+          </h1>
+          <p class="mt-2 text-blue-100">Create N-Up layouts with customizable settings</p>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Settings Panel -->
+            <div class="lg:col-span-1 space-y-6">
+              <!-- File Upload -->
+              <div class="bg-slate-50 rounded-xl p-4 border-2 border-dashed border-slate-300">
+                <h3 class="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  </svg>
+                  PDF Input
+                </h3>
+                <input type="file" id="pdfInput" accept="application/pdf" class="hidden">
+                <button id="uploadBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  </svg>
+                  <span id="uploadBtnText">Upload PDF</span>
+                </button>
+                <div id="fileInfo" class="mt-3 text-sm text-slate-600 hidden">
+                  <div id="fileName" class="font-medium truncate"></div>
+                  <div id="pageCount" class="text-slate-500"></div>
+                </div>
+              </div>
+
+              <!-- Preprocessor -->
+              <div class="bg-slate-50 rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  Preprocessor
+                </h3>
+                <div class="space-y-3">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Scale Mode</label>
+                    <select id="scaleMode" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                      <option value="fit-width">Fit to Width</option>
+                      <option value="original">Original Size</option>
+                    </select>
+                  </div>
+                  <div id="targetWidthContainer">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Target Width (mm)</label>
+                    <input type="number" id="targetWidth" value="100" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                </div>
+              </div>
+
+              <!-- N-Up Layout -->
+              <div class="bg-slate-50 rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+                  </svg>
+                  N-Up Layout
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Columns</label>
+                    <input type="number" id="columns" value="2" min="1" max="10" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Rows</label>
+                    <input type="number" id="rows" value="2" min="1" max="10" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Gutter X (mm)</label>
+                    <input type="number" id="gutterX" value="5" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Gutter Y (mm)</label>
+                    <input type="number" id="gutterY" value="5" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sheet Settings -->
+              <div class="bg-slate-50 rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3">Sheet Settings</h3>
+                <div class="space-y-3">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Width (mm)</label>
+                      <input type="number" id="sheetWidth" value="297" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Height (mm)</label>
+                      <input type="number" id="sheetHeight" value="210" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Top Margin (mm)</label>
+                      <input type="number" id="marginTop" value="10" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Right Margin (mm)</label>
+                      <input type="number" id="marginRight" value="10" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Bottom Margin (mm)</label>
+                      <input type="number" id="marginBottom" value="10" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 mb-1">Left Margin (mm)</label>
+                      <input type="number" id="marginLeft" value="10" min="0" class="number-input w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alignment -->
+              <div class="bg-slate-50 rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                  </svg>
+                  Content Alignment
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Horizontal</label>
+                    <select id="alignH" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                      <option value="left">Left</option>
+                      <option value="center" selected>Center</option>
+                      <option value="right">Right</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Vertical</label>
+                    <select id="alignV" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                      <option value="top">Top</option>
+                      <option value="center" selected>Center</option>
+                      <option value="bottom">Bottom</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="space-y-3">
+                <button id="generateBtn" class="w-full bg-green-600 hover:bg-green-700 disabled:bg-slate-400 text-white font-medium py-3 px-4 rounded-lg transition">
+                  Generate Imposition
+                </button>
+                <button id="downloadBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                  </svg>
+                  Download Result
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="lg:col-span-2">
+              <div class="bg-slate-50 rounded-xl p-4 h-full">
+                <h3 class="font-semibold text-lg mb-4">Preview</h3>
+                <div class="bg-white rounded-lg p-4 shadow-inner overflow-auto" style="max-height: 800px;">
+                  <canvas id="previewCanvas" class="border border-slate-300 mx-auto shadow-lg" style="max-width: 100%; height: auto;"></canvas>
+                  <div id="placeholderText" class="text-center text-slate-400 py-20">
+                    Upload a PDF to see preview
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let pdfFile = null;
+    let pdfLibDoc = null;
+    let pdfBytes = null;
+    let generatedSheets = [];
+    let generatedPdfDoc = null;
+
+    // Elements
+    const pdfInput = document.getElementById('pdfInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadBtnText = document.getElementById('uploadBtnText');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const pageCount = document.getElementById('pageCount');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const previewCanvas = document.getElementById('previewCanvas');
+    const placeholderText = document.getElementById('placeholderText');
+    const scaleMode = document.getElementById('scaleMode');
+    const targetWidthContainer = document.getElementById('targetWidthContainer');
+
+    // Upload button handler
+    uploadBtn.addEventListener('click', () => pdfInput.click());
+
+    // Scale mode toggle
+    scaleMode.addEventListener('change', (e) => {
+      targetWidthContainer.style.display = e.target.value === 'fit-width' ? 'block' : 'none';
+    });
+
+    // File upload handler
+    pdfInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file || file.type !== 'application/pdf') {
+        alert('Please upload a valid PDF file');
+        return;
+      }
+
+      pdfFile = file;
+      uploadBtnText.textContent = 'Change PDF';
+
+      try {
+        // Load with PDF.js for preview
+        const loadingTask = pdfjsLib.getDocument(URL.createObjectURL(file));
+        pdfDoc = await loadingTask.promise;
+
+        // Load with pdf-lib for vector output
+        const arrayBuffer = await file.arrayBuffer();
+        pdfBytes = new Uint8Array(arrayBuffer);
+        pdfLibDoc = await PDFLib.PDFDocument.load(pdfBytes);
+
+        fileName.textContent = file.name;
+        pageCount.textContent = `${pdfDoc.numPages} pages`;
+        fileInfo.classList.remove('hidden');
+        placeholderText.style.display = 'none';
+        generateBtn.disabled = false;
+      } catch (error) {
+        console.error('Error loading PDF:', error);
+        alert('Error loading PDF: ' + error.message);
+      }
+    });
+
+    // Generate imposition
+    generateBtn.addEventListener('click', async () => {
+      if (!pdfDoc) {
+        alert('Please upload a PDF first');
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Processing...';
+
+      try {
+        await generateImposition();
+        downloadBtn.disabled = false;
+      } catch (error) {
+        console.error('Error generating imposition:', error);
+        alert('Error generating imposition: ' + error.message);
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate Imposition';
+      }
+    });
+
+    // Download button
+    downloadBtn.addEventListener('click', async () => {
+      if (!generatedPdfDoc) {
+        alert('Please generate imposition first');
+        return;
+      }
+
+      downloadBtn.disabled = true;
+      downloadBtn.textContent = 'Generating PDF...';
+
+      try {
+        // Save the PDF with pdf-lib (maintains vector quality)
+        const pdfBytes = await generatedPdfDoc.save();
+
+        // Create blob and download
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'imposed-' + (pdfFile?.name || 'output.pdf');
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert('Error generating PDF: ' + error.message);
+      } finally {
+        setTimeout(() => {
+          downloadBtn.disabled = false;
+          downloadBtn.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Download Result
+          `;
+        }, 100);
+      }
+    });
+
+    async function generateImposition() {
+      // Clear previous sheets
+      generatedSheets = [];
+      generatedPdfDoc = null;
+
+      // Get settings
+      const settings = {
+        scaleMode: document.getElementById('scaleMode').value,
+        targetWidth: parseFloat(document.getElementById('targetWidth').value),
+        columns: parseInt(document.getElementById('columns').value),
+        rows: parseInt(document.getElementById('rows').value),
+        gutterX: parseFloat(document.getElementById('gutterX').value),
+        gutterY: parseFloat(document.getElementById('gutterY').value),
+        sheetWidth: parseFloat(document.getElementById('sheetWidth').value),
+        sheetHeight: parseFloat(document.getElementById('sheetHeight').value),
+        marginTop: parseFloat(document.getElementById('marginTop').value),
+        marginRight: parseFloat(document.getElementById('marginRight').value),
+        marginBottom: parseFloat(document.getElementById('marginBottom').value),
+        marginLeft: parseFloat(document.getElementById('marginLeft').value),
+        alignH: document.getElementById('alignH').value,
+        alignV: document.getElementById('alignV').value
+      };
+
+      // Convert mm to pixels (96 DPI) and to points (72 DPI for PDF)
+      const mmToPx = (mm) => (mm * 96) / 25.4;
+      const mmToPt = (mm) => (mm * 72) / 25.4;
+
+      const sheetWidthPx = mmToPx(settings.sheetWidth);
+      const sheetHeightPx = mmToPx(settings.sheetHeight);
+      const sheetWidthPt = mmToPt(settings.sheetWidth);
+      const sheetHeightPt = mmToPt(settings.sheetHeight);
+
+      // Calculate content area (in pixels for preview, points for PDF)
+      const contentWidthPx = sheetWidthPx - mmToPx(settings.marginLeft + settings.marginRight);
+      const contentHeightPx = sheetHeightPx - mmToPx(settings.marginTop + settings.marginBottom);
+      const contentWidthPt = sheetWidthPt - mmToPt(settings.marginLeft + settings.marginRight);
+      const contentHeightPt = sheetHeightPt - mmToPt(settings.marginTop + settings.marginBottom);
+
+      // Calculate cell dimensions
+      const totalGutterXPx = mmToPx(settings.gutterX) * (settings.columns - 1);
+      const totalGutterYPx = mmToPx(settings.gutterY) * (settings.rows - 1);
+      const totalGutterXPt = mmToPt(settings.gutterX) * (settings.columns - 1);
+      const totalGutterYPt = mmToPt(settings.gutterY) * (settings.rows - 1);
+
+      const cellWidthPx = (contentWidthPx - totalGutterXPx) / settings.columns;
+      const cellHeightPx = (contentHeightPx - totalGutterYPx) / settings.rows;
+      const cellWidthPt = (contentWidthPt - totalGutterXPt) / settings.columns;
+      const cellHeightPt = (contentHeightPt - totalGutterYPt) / settings.rows;
+
+      // Get first page for calculations
+      const page = await pdfDoc.getPage(1);
+      const viewport = page.getViewport({ scale: 1 });
+      const pdfLibPage = pdfLibDoc.getPages()[0];
+      const { width: pageWidthPt, height: pageHeightPt } = pdfLibPage.getSize();
+
+      // Calculate scale based on mode
+      let scalePx = 1;
+      let scalePt = 1;
+      if (settings.scaleMode === 'fit-width') {
+        const targetWidthPx = mmToPx(settings.targetWidth);
+        const targetWidthPt = mmToPt(settings.targetWidth);
+        scalePx = targetWidthPx / viewport.width;
+        scalePt = targetWidthPt / pageWidthPt;
+      }
+
+      const scaledWidthPx = viewport.width * scalePx;
+      const scaledHeightPx = viewport.height * scalePx;
+      const scaledWidthPt = pageWidthPt * scalePt;
+      const scaledHeightPt = pageHeightPt * scalePt;
+
+      // Calculate how to fit scaled page in cell
+      const scaleToFitCellPx = Math.min(
+        cellWidthPx / scaledWidthPx,
+        cellHeightPx / scaledHeightPx
+      );
+      const scaleToFitCellPt = Math.min(
+        cellWidthPt / scaledWidthPt,
+        cellHeightPt / scaledHeightPt
+      );
+
+      const finalScalePx = scalePx * scaleToFitCellPx;
+      const finalScalePt = scalePt * scaleToFitCellPt;
+
+      // Calculate actual final page dimensions after scaling
+      const finalPageWidthPx = viewport.width * finalScalePx;
+      const finalPageHeightPx = viewport.height * finalScalePx;
+      const finalPageWidthPt = pageWidthPt * finalScalePt;
+      const finalPageHeightPt = pageHeightPt * finalScalePt;
+
+      // Calculate number of sheets needed
+      const pagesPerSheet = settings.columns * settings.rows;
+      const numSheets = Math.ceil(pdfDoc.numPages / pagesPerSheet);
+
+      // Create new PDF document with pdf-lib
+      generatedPdfDoc = await PDFLib.PDFDocument.create();
+
+      // Embed all pages from source PDF once
+      const totalPages = pdfDoc.numPages;
+      const pageIndices = Array.from({ length: totalPages }, (_, i) => i);
+      const embeddedPages = await generatedPdfDoc.embedPdf(pdfBytes, pageIndices);
+
+      // Generate each sheet
+      let pageIndex = 0;
+
+      for (let sheetNum = 0; sheetNum < numSheets; sheetNum++) {
+        // Create a new canvas for preview
+        const canvas = document.createElement('canvas');
+        canvas.width = sheetWidthPx;
+        canvas.height = sheetHeightPx;
+        const ctx = canvas.getContext('2d');
+
+        // Clear canvas with white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Create a new page in the PDF document
+        const pdfPage = generatedPdfDoc.addPage([sheetWidthPt, sheetHeightPt]);
+
+        // Layout pages on this sheet
+        for (let row = 0; row < settings.rows && pageIndex < pdfDoc.numPages; row++) {
+          for (let col = 0; col < settings.columns && pageIndex < pdfDoc.numPages; col++) {
+            // Calculate page position based on actual page dimensions (pixels)
+            const pageXPx = mmToPx(settings.marginLeft) + col * (finalPageWidthPx + mmToPx(settings.gutterX));
+            const pageYPx = mmToPx(settings.marginTop) + row * (finalPageHeightPx + mmToPx(settings.gutterY));
+
+            // Calculate page position based on actual page dimensions (points) - PDF coordinates are from bottom-left
+            const pageXPt = mmToPt(settings.marginLeft) + col * (finalPageWidthPt + mmToPt(settings.gutterX));
+            const pageYPt = sheetHeightPt - mmToPt(settings.marginTop) - row * (finalPageHeightPt + mmToPt(settings.gutterY)) - finalPageHeightPt;
+
+            // Get current page from pdf.js for preview
+            const currentPage = await pdfDoc.getPage(pageIndex + 1);
+            const currentViewport = currentPage.getViewport({ scale: finalScalePx });
+
+            // Create temporary canvas for preview
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = currentViewport.width;
+            tempCanvas.height = currentViewport.height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Render page to temporary canvas
+            await currentPage.render({
+              canvasContext: tempCtx,
+              viewport: currentViewport
+            }).promise;
+
+            // Draw to preview canvas at calculated position
+            ctx.drawImage(tempCanvas, pageXPx, pageYPx);
+
+            // Draw the embedded page to PDF page (maintaining vector quality)
+            pdfPage.drawPage(embeddedPages[pageIndex], {
+              x: pageXPt,
+              y: pageYPt,
+              width: finalPageWidthPt,
+              height: finalPageHeightPt
+            });
+
+            pageIndex++;
+          }
+        }
+
+        // Store this sheet canvas for preview
+        generatedSheets.push(canvas);
+      }
+
+      // Display first sheet in preview
+      if (generatedSheets.length > 0) {
+        const ctx = previewCanvas.getContext('2d');
+        previewCanvas.width = generatedSheets[0].width;
+        previewCanvas.height = generatedSheets[0].height;
+        ctx.drawImage(generatedSheets[0], 0, 0);
+
+        // Update UI to show sheet count
+        const previewTitle = document.querySelector('.lg\\:col-span-2 h3');
+        if (previewTitle) {
+          previewTitle.textContent = `Preview (Sheet 1 of ${generatedSheets.length})`;
+        }
+      }
+    }
+
+    // Initial state
+    generateBtn.disabled = true;
+    downloadBtn.disabled = true;
+  </script>
+</body>
+</html>
